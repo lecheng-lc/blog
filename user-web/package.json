@@ -1,0 +1,49 @@
+{
+  "name": "blogs",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "server:dev": "export NODE_ENV=development && node server",
+    "upload": "node publish",
+    "server:pro": "export NODE_ENV=production && yarn build && yarn upload && node server",
+    "production": "export NODE_ENV=production &&  node server"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.2.6",
+    "@bytemd/plugin-gemoji": "^1.10.13",
+    "@bytemd/plugin-gfm": "^1.10.13",
+    "@bytemd/plugin-highlight-ssr": "^1.10.13",
+    "@bytemd/plugin-math": "^1.21.0",
+    "@bytemd/plugin-math-ssr": "^1.10.13",
+    "@bytemd/react": "^1.10.13",
+    "@types/highlight.js": "9.12.4",
+    "@types/lodash": "^4.14.165",
+    "@types/node": "^16.0.0",
+    "@types/react": "^18.2.37",
+    "@zeit/next-sass": "^1.0.1",
+    "antd": "^5.11.0",
+    "axios": "^0.19.0",
+    "dayjs": "^1.10.7",
+    "highlight.js": "^9.15.10",
+    "marked": "^0.7.0",
+    "next": "14.0.1",
+    "next-pwa": "^5.4.4",
+    "nextjs-progressbar": "^0.0.13",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-images": "^1.2.0-beta.7",
+    "sass": "^1.69.5"
+  },
+  "devDependencies": {
+    "@types/node": "^16.0.0",
+    "ali-oss": "^6.16.0",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "eslint": "8.7.0",
+    "eslint-config-next": "12.0.8",
+    "mine": "^0.1.0",
+    "typescript": "4.5.4"
+  }
+}

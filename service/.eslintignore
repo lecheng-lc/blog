@@ -1,2 +1,4 @@
 **/*.d.ts
+app/
+
 node_modules/

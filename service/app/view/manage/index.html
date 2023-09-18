@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html class="adminlogin">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+  <meta name="description" content="{{configs.siteName}}">
+  <meta property="og:type" content="website" />
+  <meta name="author" content="DoraCMS">
+  <title>
+    Lecheng
+  </title>
+  <script type="systemjs-importmap">
+    {
+      "imports": {
+        "vue": "./node_modules/vue/dist/vue.global.prod.js",
+        "@micro-zoe/micro-app": "./node_modules/@micro-zoe/micro-app/lib/index.umd.js"
+      }
+    }
+    </script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs/dist/system.js"></script>
+  <style>
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <button @click="count++">
+      Count is: {{ count }}
+    </button>
+  </div>
+</body>
+<script>
+  Promise.all([
+    System.import("vue"),
+    System.import("@micro-zoe/micro-app"),
+  ]).then(modules => {
+    const vue = modules[0]
+    const microApp = modules[1]
+    microApp.start()
+    vue.createApp({
+      setup() {
+        return {
+          count: vue.ref(0)
+        }
+      }
+    }).mount('#app')
+  })
+</script>
+
+</html>

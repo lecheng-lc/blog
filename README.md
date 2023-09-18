@@ -17,3 +17,6 @@
 * 使用jwt做权健
 * 使用图形验证码
 
+@todo
+1.vscode prettier和eslint 格式化冲突
+

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html class="admin-login">
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport"
+    content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no" />
+  <meta name="description" content="{{configs.siteName}}">
+  <meta property="og:type" content="website" />
+  <meta name="author" content="DoraCMS">
+  <title>
+    CMS Admin  Login
+  </title>
+  <script src="{{staticRootPath}}/plugins/jquery/1.10.2/jquery.min.js" type="text/javascript"></script>
+  <script src="{{staticRootPath}}/plugins/validate/1.14.0/validate.min.js" type="text/javascript"></script>
+  </script>
+  <script src="{{staticRootPath}}/plugins/layer/layer.js"></script>
+  <link rel="stylesheet" href="{{staticRootPath}}/plugins/layer/theme/default/layer.css">
+  <link rel="stylesheet" href="{{staticRootPath}}/plugins/resetcss/2.0/index.css">
+  <input type="hidden" value="{{lsk}}" id="sysKeys">
+  <style>
+    input:-internal-autofill-previewed,
+    input:-internal-autofill-selected {
+      -webkit-text-fill-color: #ffffff;
+      transition: background-color 5000s ease-out 0.5s;
+    }
+
+    .admin-login {
+      height: 100%;
+      background-repeat: no-repeat;
+      background: url('{{staticRootPath}}/themes/users/images/login-bg.svg');
+      background-size: cover;
+      position: relative;
+      background-position: 50%;
+      background-size: cover;
+    }
+
+    .admin-login body {
+      background: none;
+      height: 100%;
+    }
+
+    .admin-login .login-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 550px;
+      height: 100%;
+      min-height: 500px;
+      background-color: #eeeeee;
+      background: url('{{staticRootPath}}/themes/users/images/login-bg.svg');
+      background-position: 50%;
+      background-size: 100% 100%;
+      background-size: cover;
+    }
+
+    .admin-login .login-container .login-box {
+      box-sizing: border-box;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      width: 96%;
+      height: 94%;
+      padding: 0 4% 0 20px;
+      overflow: hidden;
+      background-color: hsla(0, 0%, 100%, 0.8);
+      border-radius: 10px;
+    }
+
+    .admin-login .login-container .login-box .login-left {
+      width: 750px;
+    }
+
+    .admin-login .login-container .login-box .login-left img {
+      width: 750px;
+    }
+
+    .admin-login .login-container .login-form {
+      padding: 40px 45px 25px;
+      border-radius: 10px;
+      box-shadow: 2px 3px 7px rgba(0, 0, 0, 0.2);
+    }
+
+    input {
+      outline-style: none;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+      padding: 6px;
+      width: 100%;
+      font-size: 14px;
+      height: 42px;
+      font-family: "Microsoft soft";
+    }
+
+    input:focus {
+      border-color: #66afe9;
+      outline: 0;
+      -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6);
+      box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075), 0 0 8px rgba(102, 175, 233, .6)
+    }
+
+    .admin-login .login-container .login-form .login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 40px;
+    }
+
+    .admin-login .login-container .login-form .login-logo .login-icon {
+      width: 70px;
+    }
+
+    .admin-login .login-container .login-form .login-logo .logo-text {
+      padding-left: 25px;
+      font-size: 48px;
+      font-weight: bold;
+      color: #475768;
+      white-space: nowrap;
+    }
+
+
+    .admin-login .login-container .login-form .form-content {
+      padding: 15px 12px;
+    }
+
+    .admin-login .login-container .login-form .input-group {
+      margin-bottom: 25px;
+    }
+
+    .admin-login .login-container .login-form .input-group.group-code {
+      position: relative;
+
+    }
+
+    .admin-login .login-container .login-form .input-group .imagecode-input {
+      flex: 1;
+    }
+
+    .admin-login .login-container .login-form .input-group .input-group-addon {
+      border-radius: 0;
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 18px;
+    }
+
+
+    .admin-login .login-container .input-group .imagecode-img {
+      width: 100px;
+      position: absolute;
+      right: 2px;
+      top: 2px;
+      bottom: 2px;
+      z-index: 12;
+      height: 36px;
+    }
+
+    .css-button-3d--sky {
+      min-width: 130px;
+      height: 40px;
+      color: #fff;
+      padding: 5px 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      display: inline-block;
+      outline: none;
+      border-radius: 5px;
+      border: none;
+      background: #3a86ff;
+      box-shadow: 0 5px #4433ff;
+    }
+
+    .css-button-3d--sky:hover {
+      box-shadow: 0 3px #4433ff;
+      top: 1px;
+    }
+
+    .css-button-3d--sky:active {
+      box-shadow: 0 0 #4433ff;
+      top: 5px;
+    }
+
+    .admin-login .login-container .btn-primary {
+      width: 100%;
+    }
+
+    .css-button-3d--sand {
+      min-width: 130px;
+      height: 40px;
+      color: #fff;
+      padding: 5px 10px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      display: inline-block;
+      outline: none;
+      border-radius: 5px;
+      border: none;
+      background: #ced4da;
+      box-shadow: 0 5px #adb5bd;
+    }
+
+    .css-button-3d--sand:hover {
+      box-shadow: 0 3px #adb5bd;
+      top: 1px;
+    }
+
+    .css-button-3d--sand:active {
+      box-shadow: 0 0 #adb5bd;
+      top: 5px;
+    }
+
+    .btn-list {
+      display: flex;
+      justify-content: space-between;
+    }
+    .input-error{
+      color:#ff4d4f;
+      margin-top:10px;
+      font-size: 14px;
+    }
+    input.input-error{
+      margin-top:0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container" style="height: 100%;">
+    <div style="height: 100%;">
+      <div class="login-container">
+        <div class="login-box">
+          <div class="login-left"><img src="{{staticRootPath}}/themes/users/images/login-left.png" alt="login"></div>
+          <div class="login-form">
+            <div class="login-logo"><img class="login-icon" src="{{staticRootPath}}/themes/users/images/logo.jpeg"
+                alt="logo">
+              <span class="logo-text">CMS-Admin</span>
+            </div>
+            <form name="login-form" id="login-form">
+              <div class="form-content">
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i></span>
+                  <input type="text" class="form-control" name="userName" placeholder="请输入用户账号">
+                </div>
+                <div class="input-group">
+                  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-lock"></i></span>
+                  <input type="password" class="form-control" name="password" placeholder="请输入用户密码">
+                </div>
+                {% if showImgCode %}
+                <div class="input-group group-code">
+                  <span class="input-group-addon" id="basic-addon1"><i class="fa fa-random"></i></span>
+                  <input type="text" class="form-control imagecode-input" name="imageCode" placeholder="请输入验证码">
+                  <img src="" id="fresh-code" class="imagecode-img"/>
+                </div>
+                {% endif %}
+                <div class="btn-list">
+                  <button type="reset" id="cancel-login" class="css-button-3d--sand">重置</button>&nbsp;
+                  <button type="submit" id="confirm-login" class="css-button-3d--sky">登录</button>&nbsp;
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  layer.config({
+    extend: 'blue/layer.css',
+    skin: 'layui-layer-blue'
+  });
+  var msgTime = 1800;
+  function getAjaxData(url, success = () => { }, type = 'get', params = {}, error = () => { }) {
+    layer.load(2, {
+      shade: [0.3, '#000']
+    });
+    var baseParams = {
+      url: url,
+      type: type.toLocaleUpperCase(),
+      success: function (result) {
+        layer.closeAll('loading');
+        if (result.status === 500) {
+          layer.msg(result.message, {
+            icon: 2,
+            shade: [0.03, '#000'],
+            zIndex: 999999999,
+            time: msgTime
+          });
+          error && error();
+        } else if (result.status === 401) {
+          layer.confirm(result.message, {
+            title: getSysValueByKey('sys_layer_confirm_title'),
+            btn: getSysValueByKey('sys_layer_confirm_btn_yes'),
+            yes: function (index) {
+              layer.close(index)
+            }
+          })
+        } else {
+          success && success(result);
+        }
+      },
+      error: function (d) {
+        layer.msg(d.message, {
+          icon: 2,
+          time: msgTime
+        });
+      }
+    };
+    if (type == 'post') {
+      baseParams = Object.assign({}, baseParams, {
+        data: params,
+      })
+    } else {
+      if (url.indexOf('?') >= 0) {
+        baseParams.url = url;
+      } else {
+        baseParams.url = url;
+      }
+    }
+    $.ajax(baseParams);
+  }
+  $("#login-form").validate({
+    errorClass: "input-error",
+    errorElement: 'p',
+    rules: {
+      userName: {
+        required: true
+      },
+      password: {
+        required: true,
+        minlength: 6,
+        maxlendth: 12
+      },
+      password: {
+        required: true,
+        minlength: 5
+      },
+      imageCode: {
+        required: true
+      }
+    },
+    messages: {
+      userName: {
+        required: "用户名不能为空"
+      },
+      password: {
+        required: "用户密码不能为空",
+        minlength: "密码长度不能小于 6 个字符",
+        maxlength: "密码长度不能大于 12 个字符"
+      },
+      imageCode: {
+        required: "验证码不能为空",
+      }
+    },
+    submitHandler: function (form) {
+      var params = {
+        userName: form['userName'].value,
+        password: form['password'].value,
+        imageCode: form['imageCode'].value
+      }
+      getAjaxData('/api/admin/doLogin', function (data) {
+        if (data.status == 200) {
+          window.location.href = "/admin/dashboard"
+        }
+      }, 'post', params, function () {
+        console.error('我出错了')
+      })
+    }
+  })
+
+  function getImgCodeData() {
+    $('#fresh-code').attr('src', '/api/getImgCode?' + Math.random())
+  }
+  $('#fresh-code').on('click', () => {
+    getImgCodeData()
+  })
+  getImgCodeData()
+</script>
+
+</html>

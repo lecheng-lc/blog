@@ -5,6 +5,7 @@
     "paths": {
       "@/module/*": ["app/module/*"]
     },
+    "allowJs": true,
     "baseUrl": "."
   }
 }

@@ -1,0 +1,20 @@
+{
+    "presets": ["next/babel"],
+    "plugins": [
+      [
+        "module-resolver",
+        {
+          "alias": {
+            "@/actions": "./actions",
+            "@@": "./components",
+            "@/constants": "./constants",
+            "@/pages": "./pages",
+            "@/public": "./public",
+            "@/reducers": "./reducers",
+            "@/utils": "./utils",
+            "@": "./"
+          }
+        }
+      ]
+    ]
+  }

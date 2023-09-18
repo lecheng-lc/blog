@@ -1,34 +1,40 @@
-import { EggPlugin } from 'egg';
+import { EggPlugin } from 'egg'
+import path from 'path'
 
 const plugin: EggPlugin = {
-  tegg: {
+  nunjucks: {
     enable: true,
-    package: '@eggjs/tegg-plugin',
+    package: 'egg-view-nunjucks'
   },
-  teggConfig: {
+  validate: {
     enable: true,
-    package: '@eggjs/tegg-config',
+    package: 'egg-lc-validate',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-validate')
   },
-  teggController: {
+  lcMiddleStage: {
     enable: true,
-    package: '@eggjs/tegg-controller-plugin',
+    package: 'egg-lc-middlestage',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-middlestage')
   },
-  teggSchedule: {
+  lcRegUser: {
     enable: true,
-    package: '@eggjs/tegg-schedule-plugin',
+    package: 'egg-lc-reguser',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-reguser')
   },
-  eventbusModule: {
+  lcBackUpData: {
     enable: true,
-    package: '@eggjs/tegg-eventbus-plugin',
+    package: 'egg-lc-backupdata',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-backupdata')
   },
-  aopModule: {
+  mongoose: {
     enable: true,
-    package: '@eggjs/tegg-aop-plugin',
+    package: 'egg-mongoose'
   },
-  tracer: {
+  lcUploadFile: {
     enable: true,
-    package: 'egg-tracer',
-  },
-};
+    package: 'egg-lc-uploadfile',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-uploadfile')
+  }
+}
 
-export default plugin;
+export default plugin

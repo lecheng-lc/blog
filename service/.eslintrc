@@ -1,4 +1,37 @@
 {
   "root": true,
-  "extends": "eslint-config-egg/typescript"
+  "extends": "eslint-config-egg/typescript",
+  "rules": {
+    "comma-dangle": [
+      "error",
+      "never"
+    ],
+    "@typescript-eslint/semi": "off",
+    "semi": [
+      "error",
+      "never"
+    ]
+  },
+  "globals": {
+    "exec": true,
+    "concatPopulate": true,
+    "getDateStr": true,
+    "getContentListFields": true,
+    "getAuthUserFields": true,
+    "checkCurrentId": true,
+    "remote": true,
+    "hot": true,
+    "news": true,
+    "random": true,
+    "near_post": true,
+    "hottags": true,
+    "ads": true,
+    "recommend": true,
+    "tags": true,
+    "navtree": true,
+    "childnav": true,
+    "PluginsExtension": true,
+    "HeaderExtension": true,
+    "AssetsExtension": true
+  }
 }

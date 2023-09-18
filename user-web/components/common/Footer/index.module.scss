@@ -1,0 +1,16 @@
+.footer-content {
+  margin-top:20px;
+  padding: 24px 0;
+  border-top: 1px solid #f4f6f8;
+  border-top: 1px solid var(--light-border-color);
+  font-size: .75rem;
+  position: relative;
+  color: #999;
+  color: var(--light-color);
+}
+.dark-theme .footer-content{
+  color: #73747b;
+  color: var(--dark-color);
+  border-top: 1px solid #4a4b50;
+  border-top: 1px solid var(--dark-border-color);
+}

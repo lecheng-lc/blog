@@ -1,0 +1,14 @@
+/* @import './base.css'; */
+body, #app,html{
+  height: 100%;
+}
+/* 修改自动填充密码字段的文本颜色 */
+input:-webkit-autofill {
+  -webkit-text-fill-color: red;
+}
+
+input:-internal-autofill-previewed,
+input:-internal-autofill-selected {
+    -webkit-text-fill-color: rgba(0, 0, 0, 0.88);
+    transition: background-color 5000s ease-out 0.5s;
+}
