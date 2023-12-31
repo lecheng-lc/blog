@@ -7,17 +7,20 @@ import {
   getVersionMaintenanceInfo
 } from '@/api/dashbord'
 import { type ThemeConfigProp } from '@root/types/store'
-const state:any = {
-  basicInfo: {
+import {type GetClientNoticeRes, type GetVersionMaintenanceInfoRes, type GetSitBasicInfoRes, type GetUserSessionRes } from '../api/interface';
+const state = {
+  basicInfo: <GetSitBasicInfoRes>{
     adminUserCount: 0,
     regUserCount: 0,
     contentCount: 0,
     messageCount: 0,
-    resources: <any>{}
+    regUsers: {},
+    resources: {},
+    messages: {}
   },
   layoutSize: Cookies.get('layoutSize') || 'middle',
   themeConfig: {},
-  loginState: <any>{
+  loginState: {
     state: false,
     userInfo: {
       userName: '',
@@ -27,17 +30,17 @@ const state:any = {
     },
     noticeCounts: 0
   },
-  notice: [],
+  notice: <GetClientNoticeRes>[],
   versionInfo: {}
 }
 
 export const dashbordStore = defineStore('dashbord', {
   state:()=>(state),
   actions: {
-    MAIN_SITEBASIC_INFO(list:any) {
+    MAIN_SITEBASIC_INFO(list:GetSitBasicInfoRes) {
       this.basicInfo = list
     },
-    ADMING_LOGINSTATE (params: any)  {
+    ADMING_LOGINSTATE (params: GetUserSessionRes)  {
       this.loginState = Object.assign({
         userInfo: {
           userName: '',
@@ -52,35 +55,39 @@ export const dashbordStore = defineStore('dashbord', {
         noticeCounts: params.noticeCounts
       });
     },
-    CLIENT_NOTICE(list:any) {
+    CLIENT_NOTICE(list:GetClientNoticeRes) {
       this.notice = list
     },
-    SYSTEM_VERSION_INFO(list:any) {
+    SYSTEM_VERSION_INFO(list: GetVersionMaintenanceInfoRes) {
       this.versionInfo = list.length > 0 ? list[0] : {}
     },
-    getSiteBasicInfo(params = {}) {
-      getSiteBasicInfo(params).then((result) => {
-        this.MAIN_SITEBASIC_INFO(result.data)
-      })
+    async getSiteBasicInfo(params = {}) {
+      const [, res] = await getSiteBasicInfo(params)
+      if(res) {
+        this.MAIN_SITEBASIC_INFO(res)
+      }
     },
-    getLoginState (params = {
+    async getLoginState (params = {
       userInfo: {},
       state: false
     }) {
-      getUserSession(params).then((result) => {
-       this.ADMING_LOGINSTATE(result.data)
-      })
+      const [, res] = await getUserSession(params)
+      if(res) {
+        this.ADMING_LOGINSTATE(res)
+      }
     },
-    getNotice(params = {}) {
-      getClientNotice(params).then((result) => {
-        this.CLIENT_NOTICE(result.data)
-      })
+    async getNotice(params = {}) {
+      const [, res] = await getClientNotice(params)
+      if(res) {
+        this.CLIENT_NOTICE(res)
+      }
     },
     
-    getVersionMaintenanceInfo( params = {}){
-      getVersionMaintenanceInfo(params).then((result) => {
-        this.SYSTEM_VERSION_INFO(result.data)
-      })
+    async getVersionMaintenanceInfo(params = {}){
+      const [, res] = await getVersionMaintenanceInfo(params)
+      if(res) {
+        this.SYSTEM_VERSION_INFO(res)
+      }
     },
     updateLayoutSize(type: string){
       // 监听函数
