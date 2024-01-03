@@ -3,8 +3,9 @@ import { defineStore } from 'pinia';
 import {
   adminResourceList,
 } from '@/api/adminResource'
+import * as Interface from '@/api/interface'
 
-export function renderTreeData(result:any) {
+export function renderTreeData(result:Interface.ResourceGetListRes) {
   let newResult = result;
   let treeData = newResult.docs;
   let childArr = _.filter(treeData, (doc) => {
@@ -25,11 +26,11 @@ export function renderTreeData(result:any) {
 
   newResult.docs = _.filter(treeData, (doc) => {
     return doc.parentId == '0'
-  });
-  return newResult;
+  })
+  return newResult
 }
 const state = {
-  resourceList: {
+  resourceList: <Interface.ResourceGetListRes><unknown>{
     pageInfo: {},
     docs: []
   },
@@ -38,18 +39,17 @@ const state = {
 export const resourceStore = defineStore('resource', {
   state:()=>(state),
   actions:{
-    ADMINRESOURCE_LIST(resourceList: any) {
-      console.log(resourceList,'=222')
+    ADMINRESOURCE_LIST(resourceList: Interface.ResourceGetListRes) {
       this.resourceList = resourceList
     },
-    getAdminResourceList(params?:any) {
-      adminResourceList(params).then((result) => {
-        console.error(888111)
-        let treeData = renderTreeData(result.data);
+    async getAdminResourceList(params = {}) {
+      const [, res] = await adminResourceList(params)
+      if(res) {
+        let treeData = renderTreeData(res);
         if (!_.isEmpty(treeData)) {
           this.ADMINRESOURCE_LIST(treeData)
         }
-      })
+      }
     }
   }
 })

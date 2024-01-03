@@ -1,8 +1,8 @@
 <template>
-    <!-- v-on="$listeners" -->
-    <!-- v-on="$listeners" -->
+  <!-- v-on="$listeners" -->
+  <!-- v-on="$listeners" -->
   <div v-if="isShowExternal" :style="styleExternalIcon" class="svg-external-icon svg-icon" />
-  <svg v-else :class="svgClass" aria-hidden="true" >
+  <svg v-else :class="svgClass" aria-hidden="true">
     <use :xlink:href="iconName" />
   </svg>
 </template>
@@ -10,15 +10,15 @@
 <script setup lang="ts">
 // doc: https://panjiachen.github.io/vue-element-admin-site/feature/component/svg-icon.html#usage
 import { isExternal } from '@/utils/validate'
-import { defineProps, computed } from 'vue'
+import { computed } from 'vue'
 const props = defineProps(['iconClass', 'className'])
-const isShowExternal = computed(()=>{
-  return isExternal(props.iconClass) 
+const isShowExternal = computed(() => {
+  return isExternal(props.iconClass)
 })
-const iconName = computed(()=>{
+const iconName = computed(() => {
   return `#icon-${props.iconClass}`
 })
-const svgClass = computed(()=>{
+const svgClass = computed(() => {
   if (props.className) {
     return 'svg-icon ' + props.className
   } else {
@@ -27,9 +27,9 @@ const svgClass = computed(()=>{
 })
 const styleExternalIcon = computed(() => {
   return {
-        mask: `url(${props.iconClass}) no-repeat 50% 50%`,
-        '-webkit-mask': `url(${props.iconClass}) no-repeat 50% 50%`
-      }
+    mask: `url(${props.iconClass}) no-repeat 50% 50%`,
+    '-webkit-mask': `url(${props.iconClass}) no-repeat 50% 50%`
+  }
 })
 </script>
 
@@ -44,7 +44,7 @@ const styleExternalIcon = computed(() => {
 
 .svg-external-icon {
   background-color: currentColor;
-  mask-size: cover!important;
+  mask-size: cover !important;
   display: inline-block;
 }
 </style>

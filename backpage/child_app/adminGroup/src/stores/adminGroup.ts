@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { defineStore } from 'pinia'
-import { adminGroupList } from '../api/adminGroup';
+import { adminGroupList } from '../api/adminGroup'
+import * as Interface from '@/api/interface'
 const state = {
   formState: {
     show: false,
@@ -9,7 +10,7 @@ const state = {
       name: '',
       comments: '',
       enable: false,
-      power: []
+      power: <string[]>[]
     }
   },
   roleFormState: {
@@ -23,14 +24,15 @@ const state = {
     }
   },
   roleList: {
-    pageInfo: {},
-    docs: []
+    pageInfo:<Interface.PageInfo>{},
+    docs: <Interface.PowerGroup[]>[]
   },
 }
+type  FormState = typeof state.formState
 export const groupStore = defineStore('group', {
   state: () => (state),
   actions: {
-    ADMINGROUP_FORMSTATE(formState: any) {
+    ADMINGROUP_FORMSTATE(formState: FormState) {
       this.formState.show = formState.show;
       this.formState.edit = formState.edit;
       if (!_.isEmpty(formState.formData)) {
@@ -45,9 +47,7 @@ export const groupStore = defineStore('group', {
       }
 
     },
-    ADMINGROUP_ROLEFORMSTATE(formState: any) {
-      console.log('2211')
-      console.log(this)
+    ADMINGROUP_ROLEFORMSTATE(formState: typeof state.formState) {
       this.roleFormState.show = formState.show;
       this.roleFormState.edit = formState.edit;
       this.roleFormState.formData = Object.assign({
@@ -57,7 +57,7 @@ export const groupStore = defineStore('group', {
         power: []
       }, formState.formData);
     },
-    ADMINGROUP_LIST(rolelist: any) {
+    ADMINGROUP_LIST(rolelist: Interface.GroupGetListRes) {
       this.roleList = rolelist
     },
     showAdminGroupForm(params = {
@@ -65,14 +65,14 @@ export const groupStore = defineStore('group', {
       formData: {}
     }) {
      
-      this.ADMINGROUP_FORMSTATE({
+      this.ADMINGROUP_FORMSTATE(<FormState>{
         show: true,
         edit: params.edit,
         formData: params.formData
       })
     },
     hideAdminGroupForm() {
-      this.ADMINGROUP_FORMSTATE({
+      this.ADMINGROUP_FORMSTATE(<FormState>{
         show: false
       })
     },
@@ -80,21 +80,22 @@ export const groupStore = defineStore('group', {
       edit: false,
       formData: {}
     }) {
-      this.ADMINGROUP_ROLEFORMSTATE({
+      this.ADMINGROUP_ROLEFORMSTATE(<FormState>{
         show: true,
         edit: params.edit,
         formData: params.formData
       })
     },
     hideAdminGroupRoleForm() {
-      this.ADMINGROUP_ROLEFORMSTATE({
+      this.ADMINGROUP_ROLEFORMSTATE(<FormState>{
         show: false
       })
     },
-    getAdminGroupList(params = {}) {
-      adminGroupList(params).then((result) => {
-        this.ADMINGROUP_LIST(result.data)
-      })
+    async getAdminGroupList(params = {}) {
+      const [, res] = await adminGroupList(params)
+      if(res) {
+        this.ADMINGROUP_LIST(res)
+      }
     }
   }
 })

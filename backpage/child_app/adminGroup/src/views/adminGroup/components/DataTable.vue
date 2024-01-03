@@ -22,13 +22,30 @@ import { useI18n } from 'vue-i18n'
 import { ref, createVNode, reactive } from 'vue'
 import { DeleteOutlined, FieldTimeOutlined, ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { groupStore } from '@/stores/adminGroup'
+interface PowerGroup {
+  _id: string;
+  name: string;
+  power: string[];
+  date: string;
+  __v: number;
+  comments: string;
+  enable?: boolean; // 可选字段，根据数据可能存在或不存在
+}
+interface PageInfo {
+  totalItems: number;
+  pageSize: number;
+  current: number;
+  searchkey: string;
+  totalPage: number;
+}
 const groupStoreIns = groupStore()
 type Key = string | number
 const [messageApi] = message.useMessage()
 const { t } = useI18n()
+
 const props = defineProps<{
-  dataList: any,
-  pageInfo: any
+  dataList: PowerGroup[],
+  pageInfo: PageInfo
 }>()
 const emits = defineEmits<{
   change: [page: number]
@@ -47,6 +64,15 @@ const state = reactive<{
   loading: false,
 });
 
+interface FormData {
+  comments: string
+  date: string
+  enable: boolean
+  name: string
+  power: string[]
+  __v: string
+  _id: string
+}
 const onChangePage = (page: number) => {
   emits('change', page)
 }
@@ -74,20 +100,18 @@ const columns = [
     dataIndex: 'operate',
   }
 ]
-const editRoleInfo = (params: any) => {
-  getOneAdminGroup({ id: params._id }).then(result => {
-    if (result.status === 200) {
-      console.log(8881111)
-      groupStoreIns.showAdminGroupForm({
-        edit: true,
-        formData: result.data
-      })
-    } else {
-      messageApi.error((result as any).message)
-    }
-  })
+const editRoleInfo = async (params: FormData) => {
+  const [err, res] = await getOneAdminGroup({ id: params._id })
+  if (res) {
+    groupStoreIns.showAdminGroupForm({
+      edit: true,
+      formData: res
+    })
+  } else {
+    messageApi.error(err.message)
+  }
 }
-const deleteRole = (params: any) => {
+const deleteRole = (params: FormData) => {
   Modal.confirm(
     {
       title: t("main.scr_modal_title"),
@@ -95,18 +119,18 @@ const deleteRole = (params: any) => {
       cancelText: t('main.cancelBtnText'),
       okText: t('main.confirmBtnText'),
       icon: createVNode(ExclamationCircleOutlined),
-      onOk() {
+      async onOk() {
         loading.value = true
-        return deleteAdminGroup({
+        const [, res] = await deleteAdminGroup({
           ids: params._id
-        }).then((res) => {
-          loading.value = false
-          if (res.status === 200) {
-            groupStoreIns.getAdminGroupList(props.pageInfo)
-          }
-        }).catch(() => {
-          messageApi.error(t("main.scr_modal_del_error_info"))
         })
+        loading.value = false
+        if (res) {
+          groupStoreIns.getAdminGroupList(props.pageInfo)
+        } else {
+          messageApi.error(t("main.scr_modal_del_error_info"))
+
+        }
       },
       onCancel() {
         Modal.destroyAll()
@@ -114,19 +138,16 @@ const deleteRole = (params: any) => {
     }
   )
 }
-const editPowerInfo = (params: any) => {
-  getOneAdminGroup({ id: params._id }).then(result => {
-    if (result.status === 200) {
-      groupStoreIns.showAdminGroupRoleForm({
-        edit: true,
-        formData: result.data
-      })
-    } else {
-      messageApi.error((result as any).message)
-    }
-  }).catch(()=>{
-    messageApi.info(t("main.scr_modal_del_error_info"))
-  })
+const editPowerInfo = async (params: FormData) => {
+  const [err, res] = await getOneAdminGroup({ id: params._id })
+  if (res) {
+    groupStoreIns.showAdminGroupRoleForm({
+      edit: true,
+      formData: res
+    })
+  } else {
+    messageApi.error(err.message)
+  }
 }
 
 

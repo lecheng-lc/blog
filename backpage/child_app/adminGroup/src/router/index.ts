@@ -5,7 +5,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path: '/admin/adminGroup',
+      path: '/',
       name: 'adminGroup',
       component: adminGroup,
     },
