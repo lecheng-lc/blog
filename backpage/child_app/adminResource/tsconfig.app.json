@@ -1,15 +1,27 @@
 {
   "extends": "@vue/tsconfig/tsconfig.dom.json",
-  "include": ["env.d.ts", "src/**/*", "../../publicMethods/**/*","../../types/*"],
-  "exclude": ["src/**/__tests__/*"],
+  "include": [
+    "env.d.ts",
+    "src/**/*",
+    "../../publicMethods/**/*",
+    "../../types/*"
+  ],
+  "exclude": [
+    "src/**/__tests__/*"
+  ],
   "compilerOptions": {
     "composite": true,
     "allowJs": true,
     "baseUrl": ".",
     "rootDir": "../../",
+    "outDir": "./dist",
     "paths": {
-      "@/*": ["./src/*"],
-      "@root/*": ["../../*"]
+      "@/*": [
+        "./src/*"
+      ],
+      "@root/*": [
+        "../../*"
+      ]
     }
   }
 }

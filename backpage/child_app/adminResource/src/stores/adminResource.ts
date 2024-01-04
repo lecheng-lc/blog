@@ -2,10 +2,10 @@ import {
   adminResourceList,
 } from '@/api/adminResource'
 import _ from 'lodash'
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
+import * as Interface from '@/api/interface'
 
-
-export function renderTreeData(result:any) {
+export function renderTreeData(result:Interface.ResourceGetListRes) {
   let newResult = result;
   let treeData = newResult.docs;
   let childArr = _.filter(treeData, (doc) => {
@@ -61,18 +61,19 @@ const state = {
       parentId: ''
     }
   },
-  resourceList: {
+  resourceList: <Interface.ResourceGetListRes><unknown>{
     pageInfo: {},
     docs: []
   },
 }
+export type  FormState = typeof state.formState
 export const resourceStore = defineStore('resource', {
   state: ()=>(state),
   actions:{
-    ADMINRESOURCE_LIST(resourceList:any) {
+    ADMINRESOURCE_LIST(resourceList: Interface.ResourceGetListRes) {
       this.resourceList = resourceList
     },
-    ADMINRESOURCE_FORMSTATE(formState:any) {
+    ADMINRESOURCE_FORMSTATE(formState:FormState) {
       this.formState.show = formState.show;
       this.formState.edit = formState.edit;
       this.formState.type = formState.type;
@@ -93,7 +94,7 @@ export const resourceStore = defineStore('resource', {
         }
       }, formState.formData);
     },
-    ADMINSELECTRESOURCE_FORMSTATE(formState:any) {
+    ADMINSELECTRESOURCE_FORMSTATE(formState:FormState) {
       this.selectFormState.show = formState.show;
       this.selectFormState.edit = formState.edit;
       this.selectFormState.type = formState.type;
@@ -101,30 +102,47 @@ export const resourceStore = defineStore('resource', {
         parentId: ''
       }, formState.formData);
     },
-    showAdminResourceForm(params:any = {
+    showAdminResourceForm(params: FormState = {
       type: 'root',
       edit: false,
-      formData: {}
+      formData: {
+        label: '',
+        type: '',
+        api: '',
+        icon: '',
+        routePath: '',
+        componentPath: '',
+        enable: false,
+        parentId: '',
+        sortId: 0,
+        comments: '',
+        parent: {
+          id: '',
+          label: ''
+        }
+      },
+      show: false
     }) {
       this.ADMINRESOURCE_FORMSTATE({
         show: true,
         type: params.type,
         edit: params.edit,
         formData: params.formData
-      })
+      } as FormState)
     },
     hideAdminResourceForm(){
       this.ADMINRESOURCE_FORMSTATE({
         show: false
-      })
+      } as FormState)
     },
-    getAdminResourceList(params={}) {
-      adminResourceList(params).then((result) => {
-        let treeData = renderTreeData(result.data);
+    async getAdminResourceList(params={}) {
+      const [, res] = await adminResourceList(params)
+      if(res) {
+        let treeData = renderTreeData(res)
         if (!_.isEmpty(treeData)) {
           this.ADMINRESOURCE_LIST(treeData)
         }
-      })
+      }
     },
     showAdminSelectResourceForm( params = {
       type: 'root',
@@ -136,12 +154,12 @@ export const resourceStore = defineStore('resource', {
         type: params.type,
         edit: params.edit,
         formData: params.formData
-      })
+      } as FormState)
     },
     hideAdminSelectResourceForm() {
       this.ADMINSELECTRESOURCE_FORMSTATE({
        show: false
-      })
+      } as FormState)
     }
   },
 })

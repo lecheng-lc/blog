@@ -18,8 +18,8 @@
 </template>
 <script lang="ts" setup>
 import { getOneAdminResource, deleteAdminResource } from '@/api/adminResource'
-import { resourceStore } from '@/stores/adminResource'
-import { message, Modal } from 'ant-design-vue'
+import { resourceStore, type FormState } from '@/stores/adminResource'
+import { message, Modal, QRCode } from 'ant-design-vue'
 import { createVNode, ref } from 'vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { useI18n } from 'vue-i18n'
@@ -28,10 +28,15 @@ const { t } = useI18n()
 const [messageApi] = message.useMessage()
 const resourceStoreIns = resourceStore()
 const props = defineProps<{
-  treeData: any
+  treeData: typeof resourceStoreIns.resourceList.docs
 }>()
-const append = ( id:string, label: string) => {
-  let formData: any = {}
+const append = (id: string, label: string) => {
+  let formData = {
+    parentId: '',
+    parent: {
+      label: ''
+    }
+  }
   formData.parentId = id
   formData.parent = {
     label: label
@@ -40,28 +45,23 @@ const append = ( id:string, label: string) => {
     edit: false,
     type: 'children',
     formData: formData
-  })
+  } as FormState)
 }
 const fieldNames: TreeProps['fieldNames'] = {
   key: '_id'
 }
 const loading = ref(false)
-const edit = (id:string) => {
-  getOneAdminResource({ id })
-    .then((result) => {
-      if (result.status === 200) {
-        resourceStoreIns.showAdminResourceForm({
-          edit: true,
-          type: 'children',
-          formData: result.data
-        })
-      } else {
-        messageApi.error((result as any).message)
-      }
+const edit = async (id: string) => {
+  const [err, res] = await getOneAdminResource({ id })
+  if (res) {
+    resourceStoreIns.showAdminResourceForm(<FormState>{
+      edit: true,
+      type: 'children',
+      formData: res
     })
-    .catch(() => {
-      messageApi.info(t('main.scr_modal_del_error_info'))
-    })
+  } else {
+    messageApi.error(err.message)
+  }
 }
 const remove = (id: string) => {
   Modal.confirm({
@@ -70,46 +70,37 @@ const remove = (id: string) => {
     cancelText: t('main.cancelBtnText'),
     okText: t('main.confirmBtnText'),
     icon: createVNode(ExclamationCircleOutlined),
-    onOk() {
+    async onOk() {
       loading.value = true
-      return deleteAdminResource({
+      const [err, res] = await deleteAdminResource({
         ids: id
       })
-        .then((res) => {
-          loading.value = false
-          if (res.status === 200) {
-            resourceStoreIns.getAdminResourceList()
-            messageApi.success(t('main.scr_modal_del_succes_info'))
-          } else {
-            messageApi.error((res as any).message)
-          }
-        })
-        .catch(() => {
-          messageApi.error(t('main.scr_modal_del_error_info'))
-        })
+      loading.value = false
+      if (res) {
+        resourceStoreIns.getAdminResourceList()
+        messageApi.success(t('main.scr_modal_del_succes_info'))
+      } else {
+        messageApi.error(err.message)
+      }
     },
     onCancel() {
       Modal.destroyAll()
     }
   })
 }
-const moveResource = (_store: any, data: any) => {
+const moveResource = async (_store: any, data: any) => {
   let rowData = data
-  getOneAdminResource({ id: rowData._id })
-    .then((result) => {
-      if (result.status === 200) {
-        resourceStoreIns.showAdminSelectResourceForm({
-          edit: true,
-          type: 'children',
-          formData: result.data
-        })
-      } else {
-        messageApi.error((result as any).message)
-      }
+  const [err, res] = await getOneAdminResource({ id: rowData._id })
+  if (res) {
+    resourceStoreIns.showAdminSelectResourceForm({
+      edit: true,
+      type: 'children',
+      formData: res
     })
-    .catch(() => {
-      messageApi.info(t('main.scr_modal_del_error_info'))
-    })
+  }
+  else {
+    messageApi.error(err.message)
+  }
 }
 const renderContent = () => { }
 </script>
