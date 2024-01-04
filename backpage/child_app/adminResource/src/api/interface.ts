@@ -112,19 +112,69 @@ export interface ResourceGetListRes {
 }
 
 export  interface ResourceGetOneReq {
-
+  id: string
 }
 export interface ResourceGetOneRes {
-
+  api: string;
+  comments: string;
+  componentPath: string;
+  date: string;
+  enable: boolean;
+  icon: string;
+  isExt: boolean;
+  label: string;
+  parentId: string;
+  routePath: string;
+  sortId: number;
+  type: string;
+  __v: number;
+  _id: string;
 }
-export interface ResourceAddOneReq {}
+export interface ResourceAddOneReq {
+  api: string;
+  comments: string;
+  componentPath: string;
+  enable: boolean;
+  icon: string;
+  label: string;
+  parent: {
+    label: string;
+  };
+  parentId: string;
+  routePath: string;
+  sortId: number;
+  type: string;
+}
 export interface ResourceAddOneRes {}
 
-export interface ResourceUpdateOneReq {}
+export interface ResourceUpdateOneReq {
+  api: string;
+  comments: string;
+  componentPath: string;
+  date: string;
+  enable: boolean;
+  icon: string;
+  isExt: boolean;
+  label: string;
+  parent: {
+    id: string;
+    label: string;
+  };
+  parentId: string;
+  routePath: string;
+  sortId: number;
+  type: string;
+  __v: number;
+  _id: string;
+}
 export interface ResourceUpdateOneRes {}
 
 export interface ReourceUpdateParentIdReq {}
 export interface ResourceUpdateParentIdRes {}
 
-export interface ResourceDeleteResourceReq {}
-export interface ResourceDeleteResourceRes {}
+export interface ResourceDeleteResourceReq {
+  ids: string
+}
+export interface ResourceDeleteResourceRes {
+
+}

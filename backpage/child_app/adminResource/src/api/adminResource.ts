@@ -34,6 +34,7 @@ export function updateAdminResource(data:Interface.ResourceUpdateOneReq) {
   }))
 }
 
+// @todo 解决问题
 export function updateResourceParentId(data:Interface.ReourceUpdateParentIdReq) {
   return awaitWraper<Interface.ResourceUpdateParentIdRes>(request({
     url: '/manage/adminResource/updateParentId',
