@@ -111,4 +111,4 @@ const deleteContentTagTable = (itemData: any) => {
   cursor: pointer;
   color: #409EFF;
 }
-</style>@/stores/contenttag
+</style>@/stores/contenttag@/api/contentCategory

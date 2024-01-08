@@ -98,4 +98,4 @@ const submitForm = () => {
     return false;
   });
 }
-</script>
+</script>@/api/contentCategory
