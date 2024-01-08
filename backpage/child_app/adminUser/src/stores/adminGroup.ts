@@ -1,8 +1,9 @@
 import { adminGroupList } from "@/api/adminGroup"
 import _ from 'lodash'
 import { defineStore } from "pinia"
+import * as Interface  from '@/api/interface'
 const state = {
-  roleList: {
+  roleList: <Interface.GroupGetListRes><unknown>{
     pageInfo: {},
     docs: []
   },
@@ -10,13 +11,14 @@ const state = {
 export const groupStore = defineStore('group',{
   state:()=>(state),
   actions: {
-    ADMINGROUP_LIST(rolelist:any) {
+    ADMINGROUP_LIST(rolelist:Interface.GroupGetListRes) {
       this.roleList = rolelist
     },
-    getAdminGroupList(params={}) {
-      adminGroupList(params).then((result) => {
-        this.ADMINGROUP_LIST(result.data)
-    })
+    async getAdminGroupList(params={}) {
+      const [, res] = await adminGroupList(params)
+      if(res) {
+        this.ADMINGROUP_LIST(res)
+      } 
     }
   }
 })

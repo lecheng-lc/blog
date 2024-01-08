@@ -1,12 +1,13 @@
 
 <template>
-  <div  :class="classObj" class="backUpData">
+  <div :class="classObj" class="backUpData">
     <div class="main-container">
-      <UserForm :device="device" :groups="adminGroupList.docs" :dialogState="formState"/>
+      <UserForm :device="device" :groups="adminGroupList.docs" :dialogState="formState" />
       <a-row class="dr-datatable">
         <a-col :span="24">
           <TopBar></TopBar>
-          <DataTable @change="renderPageList" :dataList="adminUserList.docs" :pageInfo="adminUserList.pageInfo"></DataTable>
+          <DataTable @change="renderPageList" :dataList="adminUserList.docs" :pageInfo="adminUserList.pageInfo">
+          </DataTable>
         </a-col>
       </a-row>
     </div>
@@ -14,29 +15,28 @@
 </template>
 <script lang="ts" setup>
 import UserForm from './components/UserForm.vue'
-import  DataTable from './components/DataTable.vue'
+import DataTable from './components/DataTable.vue'
 import TopBar from '@/components/TopBar.vue'
 import { initEvent } from "@root/publicMethods/events"
-import { computed , ref, onMounted} from 'vue'
-import  { groupStore } from '@/stores/adminGroup'
+import { computed, ref, onMounted } from 'vue'
+import { groupStore } from '@/stores/adminGroup'
 import { userStore } from '@/stores/adminUser'
 const groupStoreIns = groupStore()
 const userStoreIns = userStore()
-const adminGroupList = computed(()=>{
+const adminGroupList = computed(() => {
   return groupStoreIns.roleList
 })
 
-const adminUserList = computed(()=>{
-  return  userStoreIns.userList
+const adminUserList = computed(() => {
+  return userStoreIns.userList
 })
-const  formState = computed(()=>{
-  console.log('重新进了么', formState)
+const formState = computed(() => {
   return userStoreIns.formState
 })
 
 const sidebarOpened = ref(true)
 const device = ref('desktop')
-const classObj = computed(()=>{
+const classObj = computed(() => {
   return {
     hideSidebar: !sidebarOpened.value,
     openSidebar: sidebarOpened.value,
@@ -44,8 +44,8 @@ const classObj = computed(()=>{
     mobile: device.value === "mobile"
   }
 })
-const renderPageList = () =>{}
-onMounted(()=>{
+const renderPageList = () => { }
+onMounted(() => {
   // @todo initEvent(this)
   userStoreIns.getAdminUserList()
   groupStoreIns.getAdminGroupList()

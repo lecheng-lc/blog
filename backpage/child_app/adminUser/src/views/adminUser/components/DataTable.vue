@@ -22,15 +22,36 @@ import { ref, createVNode, reactive } from 'vue'
 import { DeleteOutlined, FieldTimeOutlined, ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { groupStore } from '@/stores/adminGroup'
 import { userStore } from '@/stores/adminUser'
-const groupStoreIns = groupStore()
 const userStoreIns = userStore()
 type Key = string | number
 const [messageApi] = message.useMessage()
 const { t } = useI18n()
 const props = defineProps<{
-  dataList: any,
-  pageInfo: any
+  dataList: typeof userStoreIns.userList.docs,
+  pageInfo: typeof userStoreIns.userList.pageInfo
 }>()
+interface UserGroupWithPower {
+  _id: string;
+  name: string;
+  power: string[];
+}
+
+interface UserInfoWithAuth {
+  auth: boolean;
+  comments: string;
+  countryCode: string;
+  date: string;
+  email: string;
+  enable: boolean;
+  group: UserGroupWithPower;
+  logo: string;
+  name: string;
+  phoneNum: string;
+  state: string;
+  userName: string;
+  __v: number;
+  _id: string;
+}
 const emits = defineEmits<{
   change: [page: number]
 }>()
@@ -97,22 +118,23 @@ const columns = [
     dataIndex: 'operate',
   },
 ]
-const editUserInfo = (params: any) => {
-  getOneAdminUser({ id: params._id }).then(result => {
-    if (result.status === 200) {
-      console.log(8881111)
-      userStoreIns.showAdminUserForm({
-        edit: true,
-        formData: result.data
-      })
-    } else {
-      messageApi.error((result as any).message)
-    }
-  }).catch(()=>{
-    messageApi.info(t('main.scr_modal_del_error_info'))
+
+
+const editUserInfo = async (params: UserInfoWithAuth) => {
+  console.log(params, 1222)
+  const [err, res] = await getOneAdminUser({
+    id: params._id
   })
+  if (res) {
+    userStoreIns.showAdminUserForm({
+      edit: true,
+      formData: res
+    })
+  } else {
+    messageApi.error(err.message)
+  }
 }
-const deleteUser = (params: any) => {
+const deleteUser = (params: UserInfoWithAuth) => {
   Modal.confirm(
     {
       title: t("main.scr_modal_title"),
@@ -120,20 +142,17 @@ const deleteUser = (params: any) => {
       cancelText: t('main.cancelBtnText'),
       okText: t('main.confirmBtnText'),
       icon: createVNode(ExclamationCircleOutlined),
-      onOk() {
+      async onOk() {
         loading.value = true
-        return deleteAdminUser({
+        const [err, res] = await deleteAdminUser({
           ids: params._id
-        }).then((res) => {
-          loading.value = false
-          if (res.status === 200) {
-            userStoreIns.getAdminUserList(props.pageInfo)
-          } else {
-            messageApi.error((res as any).message)
-          }
-        }).catch(() => {
-          messageApi.error(t("main.scr_modal_del_succes_info"))
         })
+        loading.value = false
+        if (res) {
+          userStoreIns.getAdminUserList(props.pageInfo)
+        } else {
+          messageApi.error(err.message)
+        }
       },
       onCancel() {
         Modal.destroyAll()

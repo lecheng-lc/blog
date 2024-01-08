@@ -1,9 +1,10 @@
 import _ from 'lodash'
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 import {
   adminUserList,
 } from '@/api/adminUser'
-
+import * as Interface from '@/api/interface'
+export type  FormState = typeof state.formState
 const state = {
   formState: {
     show: false,
@@ -18,9 +19,11 @@ const state = {
       comments: '',
       phoneNum: '',
       countryCode: '',
+      enable: false,
+      logo: ''
     }
   },
-  userList: {
+  userList: <Interface.UserGetListRes><unknown>{
     pageInfo: {},
     docs: []
   },
@@ -29,7 +32,7 @@ const state = {
 export const userStore = defineStore('user', {
   state:()=>(state),
   actions:{
-    ADMINUSERFORMSTATE(formState:any) {
+    ADMINUSERFORMSTATE(formState: FormState) {
       this.formState.show = formState.show;
       this.formState.edit = formState.edit;
       if (!_.isEmpty(formState.formData)) {
@@ -46,32 +49,34 @@ export const userStore = defineStore('user', {
           comments: '',
           phoneNum: '',
           countryCode: '',
+          enable: false,
+          logo: ''
         }
       }
     },
-    ADMINUSERLIST(userlist:any) {
+    ADMINUSERLIST(userlist:Interface.UserGetListRes) {
       this.userList = userlist
     },
     showAdminUserForm(params = {
       edit: false,
       formData: {}
     }){
-      console.error(12345678)
-      this.ADMINUSERFORMSTATE({
+      this.ADMINUSERFORMSTATE(<FormState>{
         show: true,
         edit: params.edit,
         formData: params.formData
       })
     },
     hideAdminUserForm() {
-      this.ADMINUSERFORMSTATE({
+      this.ADMINUSERFORMSTATE(<FormState>{
         show: false
       })
     },
-    getAdminUserList(params = {}) {
-      adminUserList(params).then(result=>{
-        this.ADMINUSERLIST(result.data)
-      })
+    async getAdminUserList(params = {}) {
+      const  [, res] = await adminUserList(params)
+      if(res) {
+        this.ADMINUSERLIST(res)
+      }
     }
   }
 })
