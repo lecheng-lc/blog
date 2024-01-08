@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia'
 import { getBakDataList } from '@/api/backup'
+import * as Interface from '@/api/interface'
 const state = {
-  bakDataList: {
+  bakDataList: <Interface.GetBakListRes><unknown>{
     pageInfo: {
       searchkey: '',
       state: '',
@@ -14,13 +15,14 @@ const state = {
 export const backupStore = defineStore('backup', {
   state:()=>(state),
   actions: {
-    BAKUPDATA_LIST(list:any) {
-      this.bakDataList = list || []
+    BAKUPDATA_LIST(list:Interface.GetBakListRes) {
+      this.bakDataList = list
     },
-    getBakDateList(params = {}) {
-      getBakDataList(params).then((result) => {
-        this.BAKUPDATA_LIST(result.data) 
-      })
+    async getBakDateList(params = {}) {
+      const [, res] = await  getBakDataList(params)
+      if(res) {
+        this.BAKUPDATA_LIST(res) 
+      }
     }
   }
 })

@@ -1,6 +1,6 @@
 
 <template>
-  <div  :class="classObj" class="backUpData">
+  <div :class="classObj" class="backUpData">
     <div class="main-container">
       <a-row class="dr-datatable">
         <a-col :span="24">
@@ -13,19 +13,19 @@
   </div>
 </template>
 <script lang="ts" setup>
-import  DataTable from './components/DataTable.vue'
+import DataTable from './components/DataTable.vue'
 import TopBar from '@/components/TopBar.vue'
 // import Pagination from '@/components/Pagination.vue'
 import { initEvent } from "@root/publicMethods/events";
-import { computed , ref, onMounted} from 'vue'
+import { computed, ref, onMounted } from 'vue'
 import { backupStore } from '@/stores/backup'
 const backupStoreIns = backupStore()
-const bakDataList = computed(()=>{
+const bakDataList = computed(() => {
   return backupStoreIns.bakDataList
 })
 const sidebarOpened = ref(true)
 const device = ref('desktop')
-const classObj = computed(()=>{
+const classObj = computed(() => {
   return {
     hideSidebar: !sidebarOpened.value,
     openSidebar: sidebarOpened.value,
@@ -33,7 +33,7 @@ const classObj = computed(()=>{
     mobile: device.value === "mobile"
   }
 })
-const renderPageList = (current: number = 1, pageSize: number = 10) =>{
+const renderPageList = (current: number = 1, pageSize: number = 10) => {
   let searchkey = bakDataList.value.pageInfo ? bakDataList.value.pageInfo.searchkey : ''
   let targetCurrent = current
   backupStoreIns.getBakDateList({
@@ -42,7 +42,7 @@ const renderPageList = (current: number = 1, pageSize: number = 10) =>{
     searchkey
   })
 }
-onMounted(()=>{
+onMounted(() => {
   // @todo initEvent(this)
   backupStoreIns.getBakDateList()
 })

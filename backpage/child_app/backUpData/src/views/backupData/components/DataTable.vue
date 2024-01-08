@@ -2,12 +2,13 @@
 <template>
   <div>
     <a-table :columns="columns" rowKey="_id"
-      :pagination="{total: props.pageInfo?.totalItems, pageSize: props.pageInfo?.pageSize, onChange: onChangePage,showSizeChanger: false}"
-      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange }" :data-source="props.dataList"  :loading="loading">
+      :pagination="{ total: props.pageInfo?.totalItems, pageSize: props.pageInfo?.pageSize, onChange: onChangePage, showSizeChanger: false }"
+      :row-selection="{ selectedRowKeys: state.selectedRowKeys, onChange: onSelectChange }" :data-source="props.dataList"
+      :loading="loading">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'operate'">
           <delete-outlined @click="deleteDataItem(record)" class="delete" />
-          <field-time-outlined class="recovery" @click="restoreCMSData(record)" />
+          <field-time-outlined class="recovery" @click="restoreData(record)" />
         </template>
       </template>
     </a-table>
@@ -18,11 +19,21 @@ import { deletetBakDataItem, restoreCMSData } from '@/api/backup'
 import { ref, reactive, createVNode } from 'vue'
 import { Modal, message } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
-import { DeleteOutlined, FieldTimeOutlined } from '@ant-design/icons-vue'
+import { ConsoleSqlOutlined, DeleteOutlined, FieldTimeOutlined } from '@ant-design/icons-vue'
 import ExclamationCircleOutlined from '@ant-design/icons-vue/lib/icons/ExclamationCircleFilled';
 import { backupStore } from '@/stores/backup'
+interface BackupInfo {
+  date: string;
+  fileName: string;
+  id: string;
+  logs: string;
+  path: string;
+  __v: number;
+  _id: string;
+}
+
 const emits = defineEmits<{
-  change: [page: number] 
+  change: [page: number]
 }>()
 const backupStoreIns = backupStore()
 const [messageApi] = message.useMessage()
@@ -68,7 +79,7 @@ const columns = [
 ];
 const loading = ref(false)
 const multipleSelection = ref([])
-const deleteDataItem = (itemData: any) => {
+const deleteDataItem = (itemData: BackupInfo) => {
   Modal.confirm(
     {
       title: t("main.scr_modal_title"),
@@ -76,18 +87,14 @@ const deleteDataItem = (itemData: any) => {
       cancelText: t('main.cancelBtnText'),
       okText: t('main.confirmBtnText'),
       icon: createVNode(ExclamationCircleOutlined),
-      onOk() {
+      async onOk() {
         loading.value = true
-        return deletetBakDataItem({
-          ids: itemData._id
-        }).then((res) => {
-        loading.value = false
-          if (res.status === 200) {
-            backupStoreIns.getBakDateList(props.pageInfo)
-          }
-        }).catch(() => {
+        const [, res] = await deletetBakDataItem({ ids: itemData._id })
+        if (res) {
+          backupStoreIns.getBakDateList(props.pageInfo)
+        } else {
           messageApi.error(t("main.scr_modal_del_error_info"))
-        })
+        }
       },
       onCancel() {
         Modal.destroyAll()
@@ -95,28 +102,26 @@ const deleteDataItem = (itemData: any) => {
     }
   )
 }
-const onChangePage = (page:number) =>{
+const onChangePage = (page: number) => {
   emits('change', page)
 }
-const restoreData = (itemData: any) => {
+const restoreData = (itemData: BackupInfo) => {
+  console.log(itemData)
   Modal.confirm({
     title: t("main.scr_modal_title"),
     content: t("backUpData.askRestore"),
-    cancelText:  t("main.cancelBtnText"),
+    cancelText: t("main.cancelBtnText"),
     okText: t("main.confirmBtnText"),
-    onOk(){
+    async onOk() {
       loading.value = true
-      restoreCMSData({
-      id: itemData._id
-      }).then(result=>{
-        loading.value = false
-        if (result.status === 200) {
-           backupStoreIns.getBakDateList()
-           messageApi.success(t("backUpData.restoreSuccess"))
-          } else {
-            messageApi.error((result as any).message )
-          }
-      })
+      const [err, res] = await restoreCMSData({ id: itemData._id })
+      loading.value = false
+      if (res === 200) {
+        backupStoreIns.getBakDateList()
+        messageApi.success(t("backUpData.restoreSuccess"))
+      } else {
+        messageApi.error(err?.message)
+      }
     }
   })
 }
