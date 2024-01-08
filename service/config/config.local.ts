@@ -16,7 +16,8 @@ export default (appInfo: Application) => {
     'backUpData',
     'adminGroup',
     'adminResource',
-    'adminUser'
+    'adminUser',
+    'contentTags'
   ]
   // 设置静态服务器资源路径
   config.static = {

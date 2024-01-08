@@ -88,7 +88,7 @@ const deleteDataItem = (itemData: BackupInfo) => {
       okText: t('main.confirmBtnText'),
       icon: createVNode(ExclamationCircleOutlined),
       async onOk() {
-        loading.value = true
+        loading.value = false
         const [, res] = await deletetBakDataItem({ ids: itemData._id })
         if (res) {
           backupStoreIns.getBakDateList(props.pageInfo)

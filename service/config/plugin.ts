@@ -26,6 +26,11 @@ const plugin: EggPlugin = {
     package: 'egg-lc-backupdata',
     path: path.join(__dirname, '../lib/plugin/egg-lc-backupdata')
   },
+  lcContentTags: {
+    enable: true,
+    package: 'egg-lc-contenttags',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-contenttags')
+  },
   mongoose: {
     enable: true,
     package: 'egg-mongoose'

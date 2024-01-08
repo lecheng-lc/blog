@@ -67,6 +67,7 @@ import type { FormInstance } from 'ant-design-vue'
 import { message } from 'ant-design-vue'
 import { ref } from 'vue'
 import { resourceStore } from '@/stores/adminResource'
+import * as Interface from '@/api/interface'
 const resourceStoreIns = resourceStore()
 const [messageApi] = message.useMessage()
 const { t } = useI18n()
@@ -124,7 +125,7 @@ const submitForm = () => {
     const params = props.dialogState.formData
     // 更新
     if (props.dialogState.edit) {
-      const [err, res] = await updateAdminResource(params)
+      const [err, res] = await updateAdminResource(params as Interface.ResourceUpdateOneReq)
       if (res) {
         resourceStoreIns.hideAdminResourceForm()
         resourceStoreIns.getAdminResourceList()
