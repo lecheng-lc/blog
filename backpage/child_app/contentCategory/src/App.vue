@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
-import { contentTagStore } from './stores/contentTag';
-const contentTagStoreIns = contentTagStore()
+// import { contentTagStore } from './stores/contentTag';
+// const contentTagStoreIns = contentTagStore()
 const dataListener = (data: any) => {
   if (data.type === 'layoutSize') {
     // dashabordIns.updateLayoutSize(data.size)

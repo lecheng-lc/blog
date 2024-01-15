@@ -54,7 +54,7 @@ const loading = ref(false)
 const edit = async (id: string) => {
   const [err, res] = await getOneAdminResource({ id })
   if (res) {
-    resourceStoreIns.showAdminResourceForm(<FormState>{
+    resourceStoreIns.showAdminResourceForm(<FormState><unknown>{
       edit: true,
       type: 'children',
       formData: res

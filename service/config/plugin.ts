@@ -31,6 +31,21 @@ const plugin: EggPlugin = {
     package: 'egg-lc-contenttags',
     path: path.join(__dirname, '../lib/plugin/egg-lc-contenttags')
   },
+  lcContentCategory: {
+    enable: true,
+    package: 'egg-lc-contentcategory',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-contentcategory')
+  },
+  lcTemplateConfig: {
+    enable: true,
+    package: 'egg-lc-templateconfig',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-templateconfig')
+  },
+  lcContentTemp: {
+    enable: true,
+    package: 'egg-lc-contenttemp',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-contenttemp')
+  },
   mongoose: {
     enable: true,
     package: 'egg-mongoose'

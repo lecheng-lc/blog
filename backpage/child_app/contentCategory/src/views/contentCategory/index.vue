@@ -1,35 +1,46 @@
-
 <template>
-  <div :class="classObj" class="backUpData">
+  <div :class="classObj" class="admincategory">
     <div class="main-container">
-      <TagForm :device="device" :dialogState="formState"></TagForm>
-      <a-row class="dr-datatable">
-        <a-col :span="24">
-          <TopBar type="contentTag" :pageInfo="contentTagList.pageInfo"></TopBar>
-          <DataTable @change="renderPageList" :dataList="contentTagList.docs" :pageInfo="contentTagList.pageInfo">
-          </DataTable>
-        </a-col>
-      </a-row>
+      <CategoryForm :dialogState="formState" :forderlist="getDefaultTempItems"></CategoryForm>
+      <el-row class="dr-datatable">
+        <el-col :span="24">
+          <!-- <TopBar type="contentCategory"></TopBar> -->
+          <CategoryTree :treeData="contentCategoryList.docs"></CategoryTree>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
-import DataTable from './components/DataTable.vue'
-import TagForm from './components/TagForm.vue';
-import TopBar from '@/components/TopBar.vue';
-// import Pagination from '@/components/Pagination.vue'
-import { initEvent } from "@root/publicMethods/events";
-import { computed, ref, onMounted } from 'vue'
-import { contentTagStore } from '@/stores/contentTag';
-const contentTagStoreIns = contentTagStore()
-const contentTagList = computed(() => {
-  return contentTagStoreIns.tagList
-})
-const formState = computed(() => {
-  return contentTagStoreIns.formState
-})
+import CategoryForm from "./components/categoryForm.vue"
+import CategoryTree from "./components/categoryTree.vue";
+// import TopBar from "../common/TopBar.vue";
+import { ref, computed, onMounted } from 'vue'
+import _ from "lodash";
+import { categoryStore } from "@/stores/contentCategory";
+import { templateStore } from '@/stores/contentTemplate'
+import { initEvent } from "@root/publicMethods/events"
 const sidebarOpened = ref(true)
 const device = ref('desktop')
+const categoryStoreIns = categoryStore()
+const templateStoreIns = templateStore()
+const contentCategoryList = computed(() => {
+  return categoryStoreIns.categoryList
+})
+const templateConfigList = computed(() => {
+  return templateStoreIns.templateList
+})
+const formState = computed(() => {
+  return categoryStoreIns.formState
+})
+const getDefaultTempItems = computed(() => {
+  let myTemps = templateConfigList.value
+  let currentTemp: any = _.filter(myTemps, (temp: any) => {
+    return temp.using
+  })
+  console.error(currentTemp, '77888')
+  return currentTemp.length > 0 ? currentTemp[0].items : [];
+})
 const classObj = computed(() => {
   return {
     hideSidebar: !sidebarOpened.value,
@@ -38,17 +49,12 @@ const classObj = computed(() => {
     mobile: device.value === "mobile"
   }
 })
-const renderPageList = (current: number = 1, pageSize: number = 10) => {
-  let searchkey = contentTagList.value.pageInfo ? contentTagList.value.pageInfo.searchkey : ''
-  let targetCurrent = current
-  contentTagStoreIns.getContentTagList({
-    current: targetCurrent,
-    pageSize,
-    searchkey
-  })
-}
 onMounted(() => {
-  // @todo initEvent(this)
-  contentTagStoreIns.getContentTagList({})
+  // initEvent(this)
+  categoryStoreIns.getContentCategoryList()
+  templateStoreIns.getMyTemplateList()
 })
-</script>@/stores/contenttag
+</script>
+
+<style lang="">
+</style>
