@@ -1,8 +1,8 @@
 <template>
   <div class="dr-AdminResourceForm">
-    <a-modal :title="$t('contentCategory.form_title')" v-model:open="props.dialogState.show"
-      :close-on-click-modal="false">
-      <a-form @Ok="submitForm" :model="dialogState.formData" :rules="cateRules" ref="modalFormRef" label-width="120px"
+    <a-modal :title="$t('contentCategory.form_title')" v-model:open="props.dialogState.show" :close-on-click-modal="false"
+      @Ok="submitForm">
+      <a-form :model="dialogState.formData" :rules="cateRules" ref="modalFormRef" label-width="120px"
         class="demo-ruleForm">
         <!-- 类别名称 -->
         <a-form-item v-show="dialogState.type === 'children' && !dialogState.edit"

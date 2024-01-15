@@ -46,6 +46,11 @@ const plugin: EggPlugin = {
     package: 'egg-lc-contenttemp',
     path: path.join(__dirname, '../lib/plugin/egg-lc-contenttemp')
   },
+  lcContent: {
+    enable: true,
+    package: 'egg-lc-content',
+    path: path.join(__dirname, '../lib/plugin/egg-lc-content')
+  },
   mongoose: {
     enable: true,
     package: 'egg-mongoose'

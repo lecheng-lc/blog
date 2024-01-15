@@ -4,7 +4,7 @@
       <CategoryForm :dialogState="formState" :forderlist="getDefaultTempItems"></CategoryForm>
       <el-row class="dr-datatable">
         <el-col :span="24">
-          <!-- <TopBar type="contentCategory"></TopBar> -->
+          <TopBar type="contentCategory"></TopBar>
           <CategoryTree :treeData="contentCategoryList.docs"></CategoryTree>
         </el-col>
       </el-row>
@@ -14,7 +14,7 @@
 <script lang="ts" setup>
 import CategoryForm from "./components/categoryForm.vue"
 import CategoryTree from "./components/categoryTree.vue";
-// import TopBar from "../common/TopBar.vue";
+import TopBar from "./components/TopBar.vue";
 import { ref, computed, onMounted } from 'vue'
 import _ from "lodash";
 import { categoryStore } from "@/stores/contentCategory";

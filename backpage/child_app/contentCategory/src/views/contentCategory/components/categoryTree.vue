@@ -1,14 +1,14 @@
 <template>
   <a-tree :tree-data="props.treeData" :field-names="fieldNames" default-expand-all>
-    <template #title="{ name, _id, label }">
+    <template #title="data">
       <div>
         <span class="title">
-          {{ name }}
+          {{ data.name }}
         </span>
         <span class="icon-wrapper">
-          <i class="add" @click="append(_id)">增加</i>
-          <i class="edit" @click="edit(_id)">编辑</i>
-          <i class="delete" @click="remove(_id)">删除</i>
+          <i class="add" @click="append(data)">增加</i>
+          <i class="edit" @click="edit(data._id)">编辑</i>
+          <i class="delete" @click="remove(data._id)">删除</i>
         </span>
       </div>
     </template></a-tree>
@@ -39,6 +39,7 @@ const fieldNames: TreeProps['fieldNames'] = {
   key: '_id',
 }
 const append = (data: any) => {
+  console.log(data, 11111)
   let formData: any = {};
   formData.parentId = data._id;
   formData.parentObj = data;
