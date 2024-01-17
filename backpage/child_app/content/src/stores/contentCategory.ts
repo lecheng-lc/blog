@@ -21,7 +21,7 @@ export const categoryStore = defineStore('category', {
     CONTENTCATEGORYS_LIST(categoryList: any) {
       this.categoryList = categoryList
     },
-    getContentCategoryList(params: any) {
+    getContentCategoryList(params?: any) {
       contentCategoryList(params).then((result) => {
         let treeData = renderTreeData({
           docs: result

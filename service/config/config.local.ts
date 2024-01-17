@@ -18,7 +18,8 @@ export default (appInfo: Application) => {
     'adminResource',
     'adminUser',
     'contentTags',
-    'contentCategory'
+    'contentCategory',
+    'content'
   ]
   // 设置静态服务器资源路径
   config.static = {

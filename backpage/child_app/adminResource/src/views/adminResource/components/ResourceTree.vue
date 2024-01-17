@@ -19,7 +19,7 @@
 <script lang="ts" setup>
 import { getOneAdminResource, deleteAdminResource } from '@/api/adminResource'
 import { resourceStore, type FormState } from '@/stores/adminResource'
-import { message, Modal, QRCode } from 'ant-design-vue'
+import { message, Modal } from 'ant-design-vue'
 import { createVNode, ref } from 'vue'
 import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 import { useI18n } from 'vue-i18n'

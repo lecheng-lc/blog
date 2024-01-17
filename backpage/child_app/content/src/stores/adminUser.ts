@@ -16,7 +16,7 @@ export const userStore = defineStore('user', {
     SET_ADMINUSERINFO(adminUserInfo: any) {
       this.userInfo = adminUserInfo
     },
-    getUserInfo(categoryList: any) {
+    getUserInfo() {
       return new Promise((resolve, reject) => {
         getInfo().then(response => {
           if (!response) {

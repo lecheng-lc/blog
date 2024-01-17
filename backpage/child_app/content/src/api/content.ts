@@ -65,7 +65,7 @@ export function updateContentToTop(data: any) {
   })
 }
 
-export function roofContent(data: any) {
+export function roofContentApi(data: any) {
   return request({
     url: '/manage/content/roofContent',
     data,
@@ -73,7 +73,7 @@ export function roofContent(data: any) {
   })
 }
 
-export function deleteContent(params: any) {
+export function deleteContentApi(params: any) {
   return request({
     url: '/manage/content/deleteContent',
     params,
