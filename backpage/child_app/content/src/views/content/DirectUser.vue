@@ -1,8 +1,7 @@
 <template>
   <div class="dr-contentTagForm">
-    <a-dialog :xs="20" :sm="20" :md="4" :lg="4" :xl="4" title="绑定编辑" width="40%" :visible.sync="dialogState.show"
-      :close-on-click-modal="false">
-      <a-form :model="dialogState.formData" :rules="rules" ref="ruleForm" label-width="120px" class="demo-ruleForm">
+    <a-modal title="绑定编辑" @ok="submitForm" w v-model:open="dialogState.show" :close-on-click-modal="false">
+      <a-form :model="dialogState.formData" :rules="rules" ref="modalFormRef" label-width="120px" class="demo-ruleForm">
         <p class="notice-tip">
           在添加文档之前，您需要绑定一个默认编辑
           <span v-if="targetEditor">
@@ -10,18 +9,15 @@
             <span style="color:red;font-weight:bold">{{ targetEditor.userName }}</span>）
           </span>
         </p>
+        {{ dialogState.formData }}
         <a-form-item label="绑定编辑" prop="targetUser">
-          <a-select v-model="dialogState.formData.targetUser" filterable remote reserve-keyword placeholder="搜索编辑的用户名"
-            :remote-method="remoteMethod" :loading="loading">
-            <a-select-option v-for="item in selectUserList" :key="item.value" :label="item.label"
-              :value="item.value"></a-select-option>
+          <a-select v-model:value="dialogState.formData.targetUser" show-search placeholder="搜索编辑的用户名" @select="hhh"
+            @search="remoteMethod" :loading="loading">
+            <a-select-option v-for="item in selectUserList" :key="item.value" :value="item.label"></a-select-option>
           </a-select>
         </a-form-item>
-        <a-form-item>
-          <el-button size="medium" type="primary" @click="submitForm('ruleForm')">绑定</el-button>
-        </a-form-item>
       </a-form>
-    </a-dialog>
+    </a-modal>
   </div>
 </template>
 <script lang="ts" setup>
@@ -39,13 +35,16 @@ const [messageApi] = message.useMessage()
 const { t } = useI18n()
 const modalFormRef = ref<FormInstance>()
 
+const seletKey = ref('')
 const props = defineProps<{
   dialogState: any
-  groups: any
   ids: any,
   targetEditor: any
 }>()
-const selectUserList = ref([])
+const hhh = (arg: any, option: any) => {
+  seletKey.value = option.key
+}
+const selectUserList = ref<any>([])
 const loading = ref(false)
 const rules = ref({
   targetUser: [
@@ -58,8 +57,8 @@ const rules = ref({
 })
 const queryUserListByParams = (params = {}) => {
   regUserList(params)
-    .then(result => {
-      let specialList = result.data.docs;
+    .then((result: any) => {
+      let specialList = result.docs
       if (specialList) {
         selectUserList.value = specialList.map((item: any) => {
           return {
@@ -77,7 +76,7 @@ const queryUserListByParams = (params = {}) => {
     })
 }
 const remoteMethod = (query: any) => {
-  if (query !== "") {
+  if (query !== '') {
     loading.value = true;
     queryUserListByParams({ searchkey: query });
   } else {
@@ -89,10 +88,11 @@ const confirm = () => {
 }
 const submitForm = () => {
   modalFormRef.value?.validateFields().then(async () => {
-    let params = props.dialogState.formData;
+    let params = props.dialogState.formData
+    console.error(params, ' ==---')
     let currentParams = {
-      ids: props.ids ? props.ids.join() : "",
-      targetUser: params.targetUser
+      ids: props.ids ? props.ids.join() : '',
+      targetUser: seletKey.value
     };
     updateContentEditor(currentParams)
       .then(result => {

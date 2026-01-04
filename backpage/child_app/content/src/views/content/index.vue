@@ -1,12 +1,12 @@
 <template>
   <div :class="classObj" class="content">
     <div class="main-container">
-      <!-- <DirectUser :targetEditor="adminUserInfo.targetEditor" :dialogState="directUserFormState" :ids="selectlist" />
-      <DraftTable :dialogState="draftContentDialog" />
+      <DirectUser :targetEditor="adminUserInfo.targetEditor" :dialogState="directUserFormState" :ids="selectlist" />
+      <!-- <DraftTable :dialogState="draftContentDialog" />
       <MoveCate :dialogState="moveCateFormState" :ids="selectlist" /> -->
       <a-row class="dr-datatable">
         <a-col :span="24">
-          <!-- <TopBar :device="device" type="content" :ids="selectlist" :pageInfo="contentList.pageInfo"></TopBar> -->
+          <TopBar :device="device" type="content" :ids="selectlist" :pageInfo="contentList.pageInfo"></TopBar>
           <DataTable :dataList="contentList.docs" :pageInfo="contentList.pageInfo"
             @changeContentSelectList="changeSelect"></DataTable>
         </a-col>

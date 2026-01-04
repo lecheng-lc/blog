@@ -18,11 +18,11 @@ export const userStore = defineStore('user', {
     },
     getUserInfo() {
       return new Promise((resolve, reject) => {
-        getInfo().then(response => {
+        getInfo().then((response: any) => {
           if (!response) {
             reject('Verification failed, please Login again.')
           }
-          this.SET_ADMINUSERINFO(response)
+          this.SET_ADMINUSERINFO(response.userInfo)
         }).catch(error => {
           reject(error)
         })
